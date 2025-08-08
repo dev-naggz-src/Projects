@@ -139,9 +139,9 @@ def check_collisions(player, player_bullets, alien_bullets, aliens, score):
     for bullet in alien_bullets:
         if pygame.sprite.collide_rect(bullet, player):
             bullet.kill()
-            return True  # Player hit
+            return True, score  # Player hit, return updated score
     
-    return False
+    return False, score  # No player hit, return updated score
 
 def draw_ui(screen, score, lives, font):
     """Draw the UI elements (score and lives)"""
@@ -265,7 +265,8 @@ def main():
                     last_alien_shot = current_time
             
             # Check collisions
-            if check_collisions(player, player_bullets, alien_bullets, aliens, score):
+            player_hit, score = check_collisions(player, player_bullets, alien_bullets, aliens, score)
+            if player_hit:
                 lives -= 1
                 if lives <= 0:
                     game_over = True
